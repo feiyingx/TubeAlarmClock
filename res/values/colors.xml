@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#ffffff</color>
+    <color name="transparent_white">#80ffffff</color>
+    <color name="lightBlue">#33B5E5</color>
+    <color name="transparent_dark_blue">#50010509</color>
+    <color name="transparent_dark_blue_on">#90010509</color>
+    <color name="transparent_black">#75000000</color>
+    <color name="dark_gray">#3f3f3f</color>
+    <color name="black">#000000</color>
+    <color name="snooze_red">#ff5f5f</color>
+    <color name="wake_green">#a8d324</color>
+    <color name="snooze_red_click">#e92727</color>
+    <color name="wake_green_click">#83b600</color>
+</resources>

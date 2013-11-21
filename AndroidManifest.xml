@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.tubealarmclock.mobile"
+    android:versionCode="3"
+    android:versionName="1.2" >
+
+    <uses-sdk
+        android:minSdkVersion="15"
+        android:targetSdkVersion="15" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.tubealarmclock.mobile.NoAlarmsActivity"
+            android:label="@string/title_no_alarms"
+            android:theme="@android:style/Theme.NoTitleBar" 
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.tubealarmclock.mobile.SplashActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar" 
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tubealarmclock.mobile.AlarmsActivity"
+            android:label="@string/title_activity_alarms" 
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.tubealarmclock.mobile.EditAlarmActivity"
+            android:label="@string/title_activity_edit_alarm" 
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.tubealarmclock.mobile.SetTimeActivity"
+            android:label="@string/title_activity_set_time"
+            android:theme="@android:style/Theme.Holo.Dialog" 
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="com.tubealarmclock.mobile.YouTubeFailureRecoveryActivity"
+            android:label="@string/title_activity_you_tube_failure_recovery" >
+        </activity>
+        <activity
+            android:name="com.tubealarmclock.mobile.AlertActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="landscape" 
+            android:label="@string/title_activity_alert"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+
+            <!-- the configChanges values will prevent onResume(), onPause from being called when phone is rotated, even though screen is locked in landscape -->
+            <!-- the launchMode is needed to launch an activity from our Alarm Receivers -->
+        </activity>
+
+        <receiver android:name="com.tubealarmclock.mobile.SingleAlarmReceiver" >
+        </receiver>
+        <receiver android:name="com.tubealarmclock.mobile.RepeatAlarmReceiver" >
+        </receiver>
+
+        <activity
+            android:name="com.tubealarmclock.mobile.CancelSnoozeActivity"
+            android:label="@string/title_activity_cancel_snooze" >
+        </activity>
+        <activity
+            android:name="com.tubealarmclock.mobile.SearchYoutubeActivity"
+            android:label="@string/title_activity_search_youtube" 
+            android:theme="@android:style/Theme.Holo.Dialog"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" >
+        </activity>
+    </application>
+
+</manifest>

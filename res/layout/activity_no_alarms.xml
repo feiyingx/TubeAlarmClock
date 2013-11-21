@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:gravity="center"
+    android:background="@drawable/blue_bubble_bg_logo_bot"
+    tools:context=".NoAlarmsActivity" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+    	<Button
+    	    android:id="@+id/activity_alarms_btn_plus"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:background="@null"
+	        android:text="@string/plus" 
+	        android:textSize="34sp"
+	        android:textColor="@drawable/btn_no_alarm_add"/>
+    	<Button
+    	    android:id="@+id/activity_alarms_btn_add_alarm"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:background="@null"
+    	    android:textColor="@drawable/btn_no_alarm_add"
+    	    android:textSize="34sp"
+    	    android:paddingLeft="12sp"
+    	    android:paddingRight="20sp"
+    	    android:paddingTop="20sp"
+    	    android:paddingBottom="20sp"
+    	    android:text="@string/add_alarm"/>    
+    </LinearLayout>
+    
+
+</LinearLayout>

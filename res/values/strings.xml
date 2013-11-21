@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Tube Alarm Clock</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_splash"></string>
+    <string name="title_no_alarms"></string>
+    <string name="title_activity_alarms">Alarms</string>
+    <string name="title_activity_edit_alarm"></string>
+    <string name="title_edit">Edit</string>
+    <string name="title_new">New</string>
+    <string name="title_activity_set_time">Set Time</string>
+    <string name="title_activity_you_tube_failure_recovery"></string>
+    <string name="title_activity_alert"></string>
+    <string name="title_activity_cancel_snooze"></string>
+    <string name="title_activity_search_youtube"></string>
+    
+    <string name="add_alarm">Add alarm</string>
+    <string name="plus">+</string>
+    <string name="typeface">typeface</string>
+    <string name="AM">AM</string>
+    <string name="PM">PM</string>
+    <string name="preview">preview</string>
+    <string name="stop_preview">stop</string>
+    <string name="play_video">play</string>
+    <string name="pause_video">pause</string>
+    <string name="search">search</string>
+    <string name="video">video</string>
+    <string name="action_accept">Accept</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_add_alarm">New Alarm</string>
+    <string name="error_player">There was an error initializing the YouTube (%1$s)</string>
+    <string name="MON">MON</string>
+    <string name="TUE">TUE</string>
+    <string name="WED">WED</string>
+    <string name="THU">THU</string>
+    <string name="FRI">FRI</string>
+    <string name="SAT">SAT</string>
+    <string name="SUN">SUN</string>
+    <string name="ON">ON</string>
+    <string name="OFF">OFF</string>
+    <string name="five_more_min">5 more minutes&#8230;</string>
+    <string name="im_up">I\'m up!</string>
+    <string name="snooze_notification_text">I\'ll be back at (TIME), and that\'s FINAL!</string>
+    <string name="cancel_snooze">Dismiss snooze</string>
+    <string name="search_youtube">Search YouTube</string>
+    <string name="searching">Searching&#8230;</string>
+
+</resources>

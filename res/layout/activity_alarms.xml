@@ -1,0 +1,20 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/blue_bubble_bg"
+    android:paddingTop="55dp">
+	<!-- paddingTop of 55dp is needed because of the transparent actionbar, because it causes all the content to shift up as if there is no actionbar -->
+    
+    <ListView
+        android:id="@+id/activity_alarms_lv_alarms"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"        
+	    android:paddingTop="@dimen/activity_vertical_margin"
+	    android:dividerHeight="0dp"
+	    android:divider="@null">
+        
+    </ListView>
+        
+
+</RelativeLayout>

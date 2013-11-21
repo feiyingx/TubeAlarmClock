@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_add_alarm"
+        android:icon="@drawable/icon_add_alarm"
+        android:title="@string/action_add_alarm"
+        android:showAsAction="ifRoom"/>
+
+</menu>

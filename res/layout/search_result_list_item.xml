@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <RelativeLayout
+        android:id="@+id/search_result_list_item_rellay_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="10dp"
+    	android:paddingBottom="10dp"
+    	android:paddingLeft="3dp"
+    	android:paddingRight="3dp"
+        android:background="@drawable/search_result_item_click">
+		<com.google.android.youtube.player.YouTubeThumbnailView
+		        android:id="@+id/search_result_list_item_youtube_thumb"
+		        android:layout_width="128dp"
+		        android:layout_height="72dp"
+		        android:layout_alignParentLeft="true"
+		        android:layout_alignParentTop="true"/>
+		<com.tubealarmclock.customview.TypefacedTextView
+		    xmlns:app="http://schemas.android.com/apk/res-auto"
+		    android:id="@+id/search_result_list_item_txt_video_title"
+		    android:layout_width="match_parent"
+		    android:layout_height="72dp"
+		    android:layout_toRightOf="@id/search_result_list_item_youtube_thumb"
+		    android:layout_alignTop="@id/search_result_list_item_youtube_thumb"
+		    android:layout_marginLeft="10dp"
+		    android:gravity="center_vertical"
+		    android:textSize="13sp"
+		    android:text="Video Title"
+		    android:textColor="@color/white"
+		    app:typeface="ROBOTO-LIGHT.TTF"/>
+	</RelativeLayout>
+</RelativeLayout>
