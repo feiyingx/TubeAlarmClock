@@ -15,6 +15,9 @@ import com.tubealarmclock.code.Utility;
 import com.tubealarmclock.data.Alarm;
 import com.tubealarmclock.data.AlarmsDataSource;
 
+import android.media.AudioManager;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -47,6 +50,7 @@ public class AlertActivity extends YouTubeFailureRecoveryActivity {
 	BroadcastReceiver mLockUnlockReceiver = null;
 	boolean mDidPhoneWakeFromSleep = false;
 	int mStopCounter = 0;
+	Ringtone mRingtone;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -181,6 +185,16 @@ public class AlertActivity extends YouTubeFailureRecoveryActivity {
 		mAlarm = alarm;
 		Log.d(Constants.LOG_TAG, "ALARM LOAD COMPLETE: " + mAlarm.toDebugString());
 		initControls();
+		
+		//Make sure to turn up the media volume
+		AudioManager am = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+		am.setStreamVolume(AudioManager.STREAM_ALARM, am.getStreamMaxVolume(AudioManager.STREAM_ALARM), 0);
+		am.setStreamVolume(AudioManager.STREAM_MUSIC, am.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+		
+		//Check whether there is internet connection, if not then play the back up ringtone alarm
+		if(!Utility.isOnline(getApplicationContext())){
+			mRingtone.play();
+		}
 	}
 	
 	//EVENT HANDLERS
@@ -191,7 +205,6 @@ public class AlertActivity extends YouTubeFailureRecoveryActivity {
 			//TODO: Easter egg, if snooze more than 5 times, play a different video
 			AlarmWakeLock.releaseWakeLock();
 			snoozeAlarm();
-
 			finish();
 		}
 	};
@@ -224,6 +237,8 @@ public class AlertActivity extends YouTubeFailureRecoveryActivity {
 			// using alarmId to link to the notification allows you to update the notification later on.
 			notificationManager.cancel((int) mAlarm.getId());
 			
+			if(mRingtone.isPlaying())
+				mRingtone.stop();
 			finish();
 		}
 	};
@@ -241,6 +256,10 @@ public class AlertActivity extends YouTubeFailureRecoveryActivity {
 		//Bind event handlers
 		mBtnSnooze.setOnClickListener(onClickSnooze);
 		mBtnWake.setOnClickListener(onClickWake);
+		
+		//Retrieve the backup ringtone just in case we need it
+		mRingtone = RingtoneManager.getRingtone(getApplicationContext(), mAlarm.getRingtoneUri());
+
 	}
 	
 	private void snoozeAlarm(){
@@ -261,6 +280,9 @@ public class AlertActivity extends YouTubeFailureRecoveryActivity {
 		
 		//Set a notification action to dismiss the snooze alarm, which will cancel it
 		buildNotification(cal);
+		
+		if(mRingtone.isPlaying())
+			mRingtone.stop();
 		
 		SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Log.d(Constants.LOG_TAG, "SNOOZE Alarm set for: " + dateFormatter.format(cal.getTime()));

@@ -50,7 +50,8 @@ public class DBHelper extends SQLiteOpenHelper{
 			+ " integer, " + COLUMN_VIDEO_ID
 			+ " text, " + COLUMN_VIDEO_TITLE
 			+ " text, " + COLUMN_VIDEO_DURATION
-			+ " integer);";
+			+ " integer, " + COLUMN_RINGTONE_URI
+			+ " text);";
 	
 	public static final int COLUMN_INDEX_ID = 0;
 	public static final int COLUMN_INDEX_HOUR = 1;

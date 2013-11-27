@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tubealarmclock.mobile"
-    android:versionCode="3"
-    android:versionName="1.2" >
+    android:installLocation="auto"
+    android:versionCode="5"
+    android:versionName="1.4" >
 
     <uses-sdk
         android:minSdkVersion="15"
@@ -74,6 +75,14 @@
         <receiver android:name="com.tubealarmclock.mobile.SingleAlarmReceiver" >
         </receiver>
         <receiver android:name="com.tubealarmclock.mobile.RepeatAlarmReceiver" >
+        </receiver>
+        <receiver android:name="com.tubealarmclock.mobile.AlarmResetReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.TIME_SET"/>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
+                <action android:name="android.intent.action.LOCALE_CHANGED"/>
+            </intent-filter>
         </receiver>
 
         <activity
