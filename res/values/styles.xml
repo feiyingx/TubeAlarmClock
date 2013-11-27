@@ -21,15 +21,16 @@
 	<style name="DayToggleButton">
 	    <item name="android:background">@null</item>
 	    <item name="android:textColor">@drawable/togglebtn_day_toggle</item>
-	    <item name="android:layout_width">35sp</item>
+	    <item name="android:layout_width">37sp</item>
 	    <item name="android:layout_height">wrap_content</item>
-	    <item name="android:layout_marginLeft">3sp</item>
-	    <item name="android:layout_marginRight">3sp</item>
+	    <item name="android:layout_marginLeft">1sp</item>
+	    <item name="android:layout_marginRight">1sp</item>
 	    <item name="android:paddingLeft">0sp</item>
 	    <item name="android:paddingRight">0sp</item>
 	    <item name="android:paddingTop">10sp</item>
 	    <item name="android:paddingBottom">10sp</item>
 	    <item name="android:textSize">18sp</item>
+	    <item name="android:gravity">center</item>
 	</style>    
 	
 	<style name="AlarmListItemWeekday">

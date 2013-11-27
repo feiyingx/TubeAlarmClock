@@ -5,6 +5,7 @@ import com.tubealarmclock.code.Constants;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.media.RingtoneManager;
 import android.util.Log;
 
 public class DBHelper extends SQLiteOpenHelper{
@@ -27,8 +28,10 @@ public class DBHelper extends SQLiteOpenHelper{
 	public static final String COLUMN_VIDEO_TITLE = "video_title";
 	public static final String COLUMN_VIDEO_DURATION = "video_duration";
 	
+	public static final String COLUMN_RINGTONE_URI = "ringtone_uri";
+	
 	private static final String DATABASE_NAME = "alarms.db";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	
 	//Database creation sql statement
 	private static final String DATABASE_CREATE = "create table "
@@ -64,6 +67,7 @@ public class DBHelper extends SQLiteOpenHelper{
 	public static final int COLUMN_INDEX_VIDEO_ID = 12;
 	public static final int COLUMN_INDEX_VIDEO_TITLE = 13;
 	public static final int COLUMN_INDEX_VIDEO_DURATION = 14;
+	public static final int COLUMN_INDEX_RINGTONE_URI = 15;
 	
 	public DBHelper(Context context){
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -76,10 +80,18 @@ public class DBHelper extends SQLiteOpenHelper{
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		Log.w(Constants.LOG_TAG, "Upgrading database from version " + oldVersion + " to "
-				+ newVersion + ", which will destroy all old data");
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_ALARMS);
-		onCreate(db);
+		switch(newVersion){
+			case 2:
+				//In version 2, we are adding a new column, ringtone (which is used for back up alarm if no internet to play youtube alarm)
+				db.execSQL("ALTER TABLE " + TABLE_ALARMS + " ADD COLUMN " + COLUMN_RINGTONE_URI + " text");
+				Log.w(Constants.LOG_TAG, "Upgrading database from version " + oldVersion + " to "
+						+ newVersion + ", which will add new column " + COLUMN_RINGTONE_URI);
+				break;
+			default:
+				break;
+		}
+		
+		//onCreate(db);
 	}
 
 }

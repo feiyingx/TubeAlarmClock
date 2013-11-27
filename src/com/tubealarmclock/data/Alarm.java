@@ -1,5 +1,7 @@
 package com.tubealarmclock.data;
 
+import android.net.Uri;
+
 public class Alarm {
 	private long id;
 	private int hour; //Always store hour in 24 hour format
@@ -17,6 +19,7 @@ public class Alarm {
 	private String videoId;
 	private String videoTitle;
 	private int durationSeconds;
+	private Uri ringtoneUri;
 	
 	public long getId(){
 		return id;
@@ -77,6 +80,14 @@ public class Alarm {
 		this.isSetFri = repeatDays[4];
 		this.isSetSat = repeatDays[5];
 		this.isSetSun = repeatDays[6];
+	}
+	
+	public Uri getRingtoneUri(){
+		return this.ringtoneUri;
+	}
+	
+	public void setRingtoneUri(Uri ringtone){
+		this.ringtoneUri = ringtone;
 	}
 	
 	public String toTimeString(){
@@ -141,7 +152,7 @@ public class Alarm {
 	//Will return a debug string containing information about the alarm's properties
 	public String toDebugString(){
 		boolean[] repeatDays = getRepeatDays();
-		String debugString = String.format("[Alarm Info] ID: %d | Time: %s | Format: %d | IsOn: %b | VideoId: %s | VideoTitle: %s | Duration: %d secs | Repeat: %b,%b,%b,%b,%b,%b,%b", getId(), toTimeString(), getFormat(), isOn(), getVideoId(), getVideoTitle(), getVideoDuration(), repeatDays[0], repeatDays[1], repeatDays[2], repeatDays[3], repeatDays[4], repeatDays[5], repeatDays[6]);
+		String debugString = String.format("[Alarm Info] ID: %d | Time: %s | Format: %d | IsOn: %b | VideoId: %s | VideoTitle: %s | Duration: %d secs | Repeat: %b,%b,%b,%b,%b,%b,%b | Backup ringtone: %s", getId(), toTimeString(), getFormat(), isOn(), getVideoId(), getVideoTitle(), getVideoDuration(), repeatDays[0], repeatDays[1], repeatDays[2], repeatDays[3], repeatDays[4], repeatDays[5], repeatDays[6], Uri.encode(getRingtoneUri().toString()));
 		return debugString;
 	}
 }

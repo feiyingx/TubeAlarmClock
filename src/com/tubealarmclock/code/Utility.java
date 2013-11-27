@@ -5,6 +5,8 @@ import java.util.Calendar;
 import com.tubealarmclock.data.Alarm;
 
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 import android.content.Context;
 import android.content.Intent;
@@ -97,5 +99,15 @@ public class Utility {
 		if(numDaysTilNextAlarm > 0)
 			cal.add(Calendar.HOUR, 24*numDaysTilNextAlarm);
 		return cal;
+	}
+	
+	public static boolean isOnline(Context c){
+		ConnectivityManager cm = (ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo netInfo = cm.getActiveNetworkInfo();
+		//NetInfo will be null if the device is in airplane mode, or any other situations when there's no available network
+		if(netInfo != null && netInfo.isConnected()){
+			return true;
+		}
+		return false;
 	}
 }

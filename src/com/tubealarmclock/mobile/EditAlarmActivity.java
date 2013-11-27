@@ -14,6 +14,9 @@ import com.tubealarmclock.customview.TypefacedTextView;
 import com.tubealarmclock.data.Alarm;
 import com.tubealarmclock.data.AlarmsDataSource;
 
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -28,9 +31,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.TimePicker;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
@@ -44,7 +50,8 @@ public class EditAlarmActivity extends YouTubeFailureRecoveryActivity{
 	ToggleButton mToggleBtnAM, mToggleBtnPM, mToggleBtnMon, mToggleBtnTue, mToggleBtnWed, mToggleBtnThu, mToggleBtnFri, mToggleBtnSat, mToggleBtnSun;
 	YouTubePlayerView youTubeView;
 	YouTubePlayer youTubePlayer;
-	Button mBtnPreviewVid, mBtnEditVid, mBtnStopVid;
+	Button mBtnAlarmSettings, mBtnAlarmSettingsOn, mBtnEditVid, mBtnSelectRingtone;
+	LinearLayout mLinlaySettings, mLinlayVideoSectionContainer;
 	boolean mIsNewMode = false;
 	private Alarm mAlarm;
 	AlarmsDataSource mAlarmDatasource;
@@ -74,6 +81,8 @@ public class EditAlarmActivity extends YouTubeFailureRecoveryActivity{
 			mAlarm.setVideoTitle(Constants.DefaultVideoTitle);
 			mAlarm.setVideoDuration(Constants.DefaultVideoDuration);
 			mAlarm.setIsOn(true); //Default to ON
+			Uri defaultRingtone = RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
+			mAlarm.setRingtoneUri(defaultRingtone);
 		}else{
 			//retrieve alarm from db here
 			mAlarm = mAlarmDatasource.getAlarm(alarmId);
@@ -89,6 +98,8 @@ public class EditAlarmActivity extends YouTubeFailureRecoveryActivity{
 				mAlarm.setVideoTitle(Constants.DefaultVideoTitle);
 				mAlarm.setVideoDuration(Constants.DefaultVideoDuration);
 				mAlarm.setIsOn(true); //Default to ON
+				Uri defaultRingtone = RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
+				mAlarm.setRingtoneUri(defaultRingtone);
 			}else{
 				//If we found the alarm that we want to edit, first turn off its pending intents in AlarmManager and turn them back on once edits r finished
 				setAlarm(mAlarm, false);
@@ -220,11 +231,19 @@ public class EditAlarmActivity extends YouTubeFailureRecoveryActivity{
 				//Update YouTube UI
 				youTubePlayer.loadVideo(videoId);
 				mTxtVideoTitle.setText(videoTitle);
-				mBtnStopVid.setVisibility(View.VISIBLE);
-				mBtnPreviewVid.setVisibility(View.GONE);
+				showVideo();
 				//Update alarm data object
 				mAlarm.setVideoId(videoId);
 				mAlarm.setVideoTitle(videoTitle);
+			}
+		}else if(requestCode == Constants.RequestCode.REQUEST_SET_RINGTONE){
+			if(resultCode == Activity.RESULT_OK){
+				//Update alarm with the new ringtone
+				Uri newUri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+				if(newUri != null){
+					mAlarm.setRingtoneUri(newUri);
+					mBtnSelectRingtone.setText(getRingtoneName(newUri));
+				}
 			}
 		}
 	}
@@ -261,15 +280,7 @@ public class EditAlarmActivity extends YouTubeFailureRecoveryActivity{
 			startActivityForResult(setTimeIntent, Constants.RequestCode.REQUEST_SET_TIME);
 		}
 	};
-	//Will play the youtube video
-	private OnClickListener onClickPreviewVid = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			youTubePlayer.play();
-			mBtnPreviewVid.setVisibility(Button.GONE);
-			mBtnStopVid.setVisibility(Button.VISIBLE);
-		}
-	};
+
 	private OnClickListener onClickEditVid = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
@@ -277,12 +288,28 @@ public class EditAlarmActivity extends YouTubeFailureRecoveryActivity{
 			startActivityForResult(editVidIntent, Constants.RequestCode.REQUEST_SEARCH_VIDEO);
 		}
 	};
-	private OnClickListener onClickStopVid = new OnClickListener() {
+	private OnClickListener onClickShowSettings = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			youTubePlayer.pause();
-			mBtnPreviewVid.setVisibility(Button.VISIBLE);
-			mBtnStopVid.setVisibility(Button.GONE);
+			showSettings();
+		}
+	};
+	private OnClickListener onClickShowVideo = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			showVideo();
+		}
+	};
+	private OnClickListener onClickSelectRingtone = new OnClickListener(){
+		@Override
+		public void onClick(View v){
+			Intent systemRingtoneIntent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+			systemRingtoneIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_RINGTONE);
+			systemRingtoneIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Back up ringtone");
+			//Prepopulate with alarm's ringtone
+			systemRingtoneIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, mAlarm.getRingtoneUri());
+			startActivityForResult(systemRingtoneIntent, Constants.RequestCode.REQUEST_SET_RINGTONE);
 		}
 	};
 	private OnCheckedChangeListener onCheckedChangeWeekday = new OnCheckedChangeListener() {
@@ -314,9 +341,13 @@ public class EditAlarmActivity extends YouTubeFailureRecoveryActivity{
 		mToggleBtnSat = (ToggleButton)findViewById(R.id.activity_edit_alarm_togglebtn_sat);
 		mToggleBtnSun = (ToggleButton)findViewById(R.id.activity_edit_alarm_togglebtn_sun);
 		
-		mBtnPreviewVid = (Button)findViewById(R.id.activity_edit_alarm_btn_preview_vid);
+		mBtnAlarmSettings = (Button)findViewById(R.id.activity_edit_alarm_btn_alarm_settings);
+		mBtnAlarmSettingsOn = (Button)findViewById(R.id.activity_edit_alarm_btn_alarm_settings_on);
 		mBtnEditVid = (Button)findViewById(R.id.activity_edit_alarm_btn_edit_vid);
-		mBtnStopVid = (Button)findViewById(R.id.activity_edit_alarm_btn_stop_preview_vid);
+		mBtnSelectRingtone = (Button)findViewById(R.id.activity_edit_alarm_btn_edit_ringtone);
+		
+		mLinlaySettings = (LinearLayout)findViewById(R.id.activity_edit_alarm_linlay_settings);
+		mLinlayVideoSectionContainer = (LinearLayout)findViewById(R.id.activity_edit_alarm_linlay_video_container);
 		
 		youTubeView = (YouTubePlayerView)findViewById(R.id.activity_edit_alarm_youtube_player);
 		youTubeView.initialize(Constants.YOUTUBE_API_KEY, this);
@@ -347,13 +378,17 @@ public class EditAlarmActivity extends YouTubeFailureRecoveryActivity{
 			mToggleBtnPM.setVisibility(View.GONE);
 		}
 		
+		//Set styles
+		mBtnSelectRingtone.setTypeface(Utility.getTypeface(getApplicationContext(), "ROBOTO-LIGHT.TTF"));
+		
 		//Event handlers
 		mToggleBtnAM.setOnCheckedChangeListener(onCheckedChangeAM);
 		mToggleBtnPM.setOnCheckedChangeListener(onCheckedChangePM);
 		mTxtTime.setOnClickListener(onClickTime);
-		mBtnPreviewVid.setOnClickListener(onClickPreviewVid);
 		mBtnEditVid.setOnClickListener(onClickEditVid);
-		mBtnStopVid.setOnClickListener(onClickStopVid);
+		mBtnAlarmSettings.setOnClickListener(onClickShowSettings);
+		mBtnAlarmSettingsOn.setOnClickListener(onClickShowVideo);
+		mBtnSelectRingtone.setOnClickListener(onClickSelectRingtone);
 		
 		mToggleBtnMon.setOnCheckedChangeListener(onCheckedChangeWeekday);
 		mToggleBtnTue.setOnCheckedChangeListener(onCheckedChangeWeekday);
@@ -364,6 +399,42 @@ public class EditAlarmActivity extends YouTubeFailureRecoveryActivity{
 		mToggleBtnSun.setOnCheckedChangeListener(onCheckedChangeWeekday);
 	}
 	
+	private void showSettings(){
+		mLinlaySettings.setVisibility(View.VISIBLE);
+		youTubeView.setVisibility(View.GONE);
+		
+		//Start animation for the transition
+		Animation slideOutLeft = AnimationUtils.loadAnimation(this, R.anim.card_slide_left_out);
+		youTubeView.startAnimation(slideOutLeft);
+		Animation slideInRight = AnimationUtils.loadAnimation(this, R.anim.card_slide_right_in);
+		mLinlaySettings.startAnimation(slideInRight);
+		
+		mBtnAlarmSettings.setVisibility(View.GONE);
+		mBtnAlarmSettingsOn.setVisibility(View.VISIBLE);
+	}
+	
+	private void showVideo(){
+		youTubeView.setVisibility(View.VISIBLE);
+		mLinlaySettings.setVisibility(View.GONE);
+		
+		//Start animation for the transition
+		Animation slideInLeft = AnimationUtils.loadAnimation(this, R.anim.card_slide_left_in);
+		youTubeView.startAnimation(slideInLeft);
+		Animation slideOutRight = AnimationUtils.loadAnimation(this, R.anim.card_slide_right_out);
+		mLinlaySettings.startAnimation(slideOutRight);
+		
+		mBtnAlarmSettingsOn.setVisibility(View.GONE);
+		mBtnAlarmSettings.setVisibility(View.VISIBLE);
+	}
+	
+	private String getRingtoneName(Uri uri){
+		if(uri != null){
+			Ringtone alarmBackupRingtone = RingtoneManager.getRingtone(getApplicationContext(), mAlarm.getRingtoneUri());
+			String ringtoneName = alarmBackupRingtone.getTitle(getApplicationContext());
+			return ringtoneName;
+		}
+		return "Ringtone error :(";
+	}
 	
 	//Prepopulate view controls
 	//If NEW mode, then prepopulate AM/PM and a video
@@ -392,6 +463,14 @@ public class EditAlarmActivity extends YouTubeFailureRecoveryActivity{
 		//TODO: cannot put text duration view on top of youtube view, it causes the player to throw exception
 		//mTxtDuration.setText(Utility.getTimeStringFromSeconds(mAlarm.getVideoDuration()));
 		mTxtVideoTitle.setText(Utility.truncateString(mAlarm.getVideoTitle(), Constants.VideoTitleMaxLength));
+		
+		if(mAlarm.getRingtoneUri() == null){
+			//This should only happen the first time, so for the older alarms, set to a default alarm
+			Uri defaultRingtone = RingtoneManager.getActualDefaultRingtoneUri(getApplicationContext(), RingtoneManager.TYPE_RINGTONE);
+			mAlarm.setRingtoneUri(defaultRingtone);
+		}
+		
+		mBtnSelectRingtone.setText(getRingtoneName(mAlarm.getRingtoneUri()));
 		//Log.d(Constants.LOG_TAG, "Video title length: " + mAlarm.getVideoTitle().length());
 	}
 		
@@ -457,9 +536,13 @@ public class EditAlarmActivity extends YouTubeFailureRecoveryActivity{
 		if(!wasRestored){
 			player.cueVideo(mAlarm.getVideoId());
 			Log.d(Constants.LOG_TAG, "Video loaded: " + mAlarm.getVideoId());
+			//Set settings layout height to be the same as youTubeView
+			int youTubeHeight = youTubeView.getHeight();
+			mLinlaySettings.getLayoutParams().height = youTubeHeight;
+			mLinlayVideoSectionContainer.getLayoutParams().height = youTubeHeight;
 		}
 		
-		player.setPlayerStyle(PlayerStyle.CHROMELESS);
+		player.setPlayerStyle(PlayerStyle.MINIMAL);
 		youTubePlayer = player;
 		player.setPlayerStateChangeListener(new YouTubePlayer.PlayerStateChangeListener() {
 			@Override

@@ -10,6 +10,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.util.Log;
 
 public class AlarmsDataSource {
@@ -31,7 +32,8 @@ public class AlarmsDataSource {
 		DBHelper.COLUMN_SUN,
 		DBHelper.COLUMN_VIDEO_ID,
 		DBHelper.COLUMN_VIDEO_TITLE,
-		DBHelper.COLUMN_VIDEO_DURATION
+		DBHelper.COLUMN_VIDEO_DURATION,
+		DBHelper.COLUMN_RINGTONE_URI
 	};
 	
 	public AlarmsDataSource(Context context){
@@ -67,6 +69,7 @@ public class AlarmsDataSource {
 		values.put(DBHelper.COLUMN_VIDEO_ID, alarm.getVideoId());
 		values.put(DBHelper.COLUMN_VIDEO_TITLE, alarm.getVideoTitle());
 		values.put(DBHelper.COLUMN_VIDEO_DURATION, alarm.getVideoDuration());
+		values.put(DBHelper.COLUMN_RINGTONE_URI, Uri.encode(alarm.getRingtoneUri().toString()));
 		
 		//Get the alarm id by inserting the values, then retrieve the newly created Alarm from db and return it
 		long insertId = db.insert(DBHelper.TABLE_ALARMS, null, values);
@@ -119,6 +122,9 @@ public class AlarmsDataSource {
 		values.put(DBHelper.COLUMN_VIDEO_ID, alarm.getVideoId());
 		values.put(DBHelper.COLUMN_VIDEO_TITLE, alarm.getVideoTitle());
 		values.put(DBHelper.COLUMN_VIDEO_DURATION, alarm.getVideoDuration());
+		if(alarm.getRingtoneUri() != null){
+			values.put(DBHelper.COLUMN_RINGTONE_URI, Uri.encode(alarm.getRingtoneUri().toString()));
+		}
 		
 		//Get the alarm id by inserting the values, then retrieve the newly created Alarm from db and return it
 		db.update(DBHelper.TABLE_ALARMS, values, DBHelper.COLUMN_ID +  " = " + alarm.getId(), null);
@@ -171,6 +177,12 @@ public class AlarmsDataSource {
 		alarm.setVideoTitle(cursor.getString(DBHelper.COLUMN_INDEX_VIDEO_TITLE));
 		alarm.setVideoDuration(cursor.getInt(DBHelper.COLUMN_INDEX_VIDEO_DURATION));
 		
+		String ringtoneUriString = cursor.getString(DBHelper.COLUMN_INDEX_RINGTONE_URI);
+		if(ringtoneUriString == null || ringtoneUriString == ""){
+			alarm.setRingtoneUri(null); //This case is for old alarms that were set before ringtone feature was added
+		}else{
+			alarm.setRingtoneUri(Uri.parse(Uri.decode(ringtoneUriString)));
+		}
 		return alarm;
 	}
 }

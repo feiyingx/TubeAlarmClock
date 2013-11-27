@@ -47,5 +47,8 @@
     <string name="cancel_snooze">Dismiss snooze</string>
     <string name="search_youtube">Search YouTube</string>
     <string name="searching">Searching&#8230;</string>
-
+	<string name="back_up_ringtone">Back up ringtone</string>
+	<string name="back_up_ringtone_desc">If an internet connection is unavailable, alarm will still trigger with this ringtone.</string>
+	<string name="select_ringtone">Select ringtone</string>
+	<string name="settings">settings</string>
 </resources>

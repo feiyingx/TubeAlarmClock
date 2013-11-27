@@ -19,6 +19,7 @@ public class Constants {
 	public class RequestCode{
 		public static final int REQUEST_SET_TIME = 7000;
 		public static final int REQUEST_SEARCH_VIDEO = 7001;
+		public static final int REQUEST_SET_RINGTONE = 7002;
 	}
 	
 	public class ResultCode{

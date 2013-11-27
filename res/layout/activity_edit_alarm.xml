@@ -111,30 +111,31 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <Button
-			    android:id="@+id/activity_edit_alarm_btn_preview_vid"
+			    android:id="@+id/activity_edit_alarm_btn_alarm_settings"
 			    android:layout_height="wrap_content"
 			    android:layout_width="match_parent"
 			    android:layout_weight="1"
-			    android:text="@string/play_video"
-			    android:drawableLeft="@drawable/icon_play"
+			    android:text="@string/settings"
+			    android:drawableLeft="@drawable/icon_settings"
 			    android:textColor="@color/white"
 			    android:drawablePadding="5sp"
 			    android:paddingLeft="15sp"
 			    android:paddingRight="15sp"
 			    style="?android:attr/borderlessButtonStyle"/>
             <Button
-			    android:id="@+id/activity_edit_alarm_btn_stop_preview_vid"
+			    android:id="@+id/activity_edit_alarm_btn_alarm_settings_on"
 			    android:layout_height="wrap_content"
 			    android:layout_width="match_parent"
 			    android:layout_weight="1"
-			    android:text="@string/pause_video"
-			    android:drawableLeft="@drawable/icon_pause"
+			    android:text="@string/settings"
+			    android:drawableLeft="@drawable/icon_settings"
 			    android:textColor="@color/white"
 			    android:drawablePadding="5sp"
 			    android:paddingLeft="15sp"
 			    android:paddingRight="15sp"
-			    android:visibility="gone"
-			    style="?android:attr/borderlessButtonStyle"/>
+			    style="?android:attr/borderlessButtonStyle"
+			    android:background="@color/barely_visible_white"
+			    android:visibility="gone"/>
              <Button
 			    android:id="@+id/activity_edit_alarm_btn_edit_vid"
 			    android:layout_height="wrap_content"
@@ -148,11 +149,61 @@
 			    android:paddingRight="15sp"
 			    style="?android:attr/borderlessButtonStyle"/>
         </LinearLayout>
-        <com.google.android.youtube.player.YouTubePlayerView
-            android:id="@+id/activity_edit_alarm_youtube_player"
+        <LinearLayout 
+            android:id="@+id/activity_edit_alarm_linlay_video_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/activity_edit_alarm_linlay_video_buttons"/>
+            android:orientation="vertical"
+            android:background="@color/barely_visible_white"
+            android:layout_below="@id/activity_edit_alarm_linlay_video_buttons">
+            <com.google.android.youtube.player.YouTubePlayerView
+	            android:id="@+id/activity_edit_alarm_youtube_player"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"/>
+	        <LinearLayout 
+	            android:id="@+id/activity_edit_alarm_linlay_settings"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:layout_below="@id/activity_edit_alarm_linlay_video_buttons"
+	            android:orientation="vertical"
+	            android:gravity="center_vertical"
+	            android:visibility="gone">
+	            <com.tubealarmclock.customview.TypefacedTextView
+			  	    xmlns:app="http://schemas.android.com/apk/res-auto"
+			  	    android:id="@+id/activity_edit_alarm_txt_settings_ringtone"
+			  	    android:layout_width="match_parent"
+			  	    android:layout_height="wrap_content"
+			  	    android:paddingLeft="20dp"
+			  	    android:paddingRight="20dp"
+			  	    android:layout_marginBottom="3dp"
+			  	    android:textSize="22sp"
+			  	    android:text="@string/back_up_ringtone"
+			  	    app:typeface="ROBOTO-REGULAR.TTF"/>
+	            <com.tubealarmclock.customview.TypefacedTextView
+			  	    xmlns:app="http://schemas.android.com/apk/res-auto"
+			  	    android:id="@+id/activity_edit_alarm_txt_settings_ringtone_subtext"
+			  	    android:layout_width="match_parent"
+			  	    android:layout_height="wrap_content"
+			  	    android:paddingLeft="20dp"
+			  	    android:paddingRight="20dp"
+			  	    android:textSize="14sp"
+			  	    android:text="@string/back_up_ringtone_desc"
+			  	    app:typeface="ROBOTO-LIGHT.TTF"/>
+	            <Button
+				    android:id="@+id/activity_edit_alarm_btn_edit_ringtone"
+				    android:layout_height="wrap_content"
+				    android:layout_width="wrap_content"
+				    android:text="@string/select_ringtone"
+				    android:drawableLeft="@drawable/icon_volume_on"
+				    android:textColor="@color/white"
+				    android:drawablePadding="5sp"
+				    android:paddingLeft="15sp"
+				    android:paddingRight="15sp"
+				    android:layout_marginTop="10dp"
+				    style="?android:attr/borderlessButtonStyle"/>
+	        </LinearLayout>
+        </LinearLayout>
+        
         <TextView
             android:id="@+id/activity_edit_alarm_txt_duration"
             android:layout_width="wrap_content"
@@ -169,7 +220,7 @@
 	  	    android:id="@+id/activity_edit_alarm_txt_video_title"
 	  	    android:layout_width="match_parent"
 	  	    android:layout_height="wrap_content"
-	  	    android:layout_below="@id/activity_edit_alarm_youtube_player"
+	  	    android:layout_below="@id/activity_edit_alarm_linlay_video_container"
 	  	    android:padding="10sp"
 	  	    android:textSize="18sp"
 	  	    android:text="Video Title"
